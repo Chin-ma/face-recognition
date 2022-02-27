@@ -1,0 +1,5 @@
+cv2
+sqlite3
+numpy
+pillow
+pickle
