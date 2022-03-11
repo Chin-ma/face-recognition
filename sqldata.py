@@ -2,7 +2,9 @@ import numpy as np
 import cv2, os
 from PIL import Image
 import pickle
-import sqlite3
+import mysql.connector
+from mysql.connector import Error
+from mysql.connector import errorcode
 
 def recognition():
 	recognizer = cv2.face.LBPHFaceRecognizer_create()
@@ -10,13 +12,27 @@ def recognition():
 	faceDetect = cv2.CascadeClassifier('C:\\Users\\chinm\\OneDrive\\Documents\\Major-Project-Third-Year\\New-Face-ecog\\haarcascade_frontalface_default.xml')
 	path = 'dataSet'
 	def getProfile(Id):
-		conn = sqlite3.connect("C:\\Users\\chinm\\OneDrive\\Documents\\Major-Project-Third-Year\\New-Face-ecog\\FaceBase.db")
-		cmd = "SELECT * FROM people"
-		cursor = conn.execute(cmd)
-		profile = None
-		for row in cursor:
-			profile = row
-		conn.close()
+		# conn = sqlite3.connect("C:\\Users\\chinm\\OneDrive\\Documents\\Major-Project-Third-Year\\New-Face-ecog\\FaceBase.db")
+		# conn = mysql.connector.connect(host='localhost', database='facebase', user='root', password='')
+		# cmd = "SELECT * FROM people"
+		# cursor = conn.execute(cmd)
+		# profile = None
+		# for row in cursor:
+		# 	profile = row
+		# conn.close()
+		# return profile
+		try:
+			conn = mysql.connector.connect(host='localhost', database='facebase', user='root', password='')
+			cmd = "SELECT * FROM people"
+			cursor = conn.cursor()
+			cursor.execute(cmd)
+			profile = None
+			for row in cursor:
+				profile = row
+			conn.commit()
+			cursor.close()
+		except mysql.connector.Error as error:
+			print("Failed to display row {}".format(error))
 		return profile
 
 	cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
@@ -46,14 +62,28 @@ def recognition():
 			
 			if (conf<50):
 				if(Id==1):
-					Id="chinmay"
+					Id="Chinmay"
+				elif(Id==2):
+					Id=""
+				elif(Id==3):
+					Id=""
+				elif(Id==4):
+					Id="Elon"
+				elif(Id==5):
+					Id=""
+				elif(Id==6):
+					Id=""
+				elif(Id==7):
+					Id=""
+				elif(Id==8):
+					Id=""
 
 			else:
 				Id="Unknown"
 			
 			profile = getProfile(Id)
 			if (profile!=None):
-				# cv2.putText(frame, "Name: " +str(profile[1]), (x,y+h+30), font, fontscale, fontcolor, stroke)
+				# cv2.putText(frame, "Name: " +profile[1], (x,y+h+30), font, fontscale, fontcolor, stroke)
 				cv2.putText(frame, "Name: " +str(Id), (x,y+h+30), font, fontscale, fontcolor, stroke)
 		
 
