@@ -5,11 +5,12 @@ import pickle
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
+from invoice import invoiceGenerate
 
 def recognition():
 	recognizer = cv2.face.LBPHFaceRecognizer_create()
-	recognizer.read("C:\\Users\\chinm\\OneDrive\\Documents\\Major-Project-Third-Year\\New-Face-ecog\\recognizer\\trainingData.yml")
-	faceDetect = cv2.CascadeClassifier('C:\\Users\\chinm\\OneDrive\\Documents\\Major-Project-Third-Year\\New-Face-ecog\\haarcascade_frontalface_default.xml')
+	recognizer.read("recognizer/trainingData.yml")
+	faceDetect=cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 	path = 'dataSet'
 	def getProfile(Id):
 		try:
@@ -54,6 +55,9 @@ def recognition():
 				if (profile!=None):
 					cv2.putText(frame, "Name: " +str(profile[1]), (x,y+h+30), font, fontscale, fontcolor, stroke)
 					# cv2.putText(frame, "Name: " +str(Id), (x,y+h+30), font, fontscale, fontcolor, stroke)
+					person = str(profile[1])
+					invoiceGenerate(person)
+
 			else:
 				cv2.putText(frame, "Unknown", (x,y+h+30), font, fontscale, fontcolor, stroke)
 		
