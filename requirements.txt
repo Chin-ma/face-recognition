@@ -1,5 +1,5 @@
-cv2
-sqlite3
+opencv-python
+opencv-contrib-python
+mysql-connector
 numpy
 pillow
-pickle
