@@ -1,26 +1,44 @@
 import smtplib
-gmail_user = 'chinmay2003cp@gmail.com'
-part = 'xfvklwrbdubwtomo'
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+import time
 
-sent_from = gmail_user
-to = ['chinu2003cp@gmail.com']
-subject = 'Test mail from python'
-body = 'This is a test mail which is generated using python to check its functionality'
+def sendMail(receive):
+    
+    fromaddr = "chinmay2003cp@gmail.com"
+    toaddr = receive
+    msg = MIMEMultipart()
+    msg['From'] = fromaddr
+    msg['To'] = toaddr
+    msg['Subject'] = "Fine generated for not wearing mask"
+    body = "This mail is being sent to you because of the discription of the rule of not wearing mask in public places"
+    msg.attach(MIMEText(body, 'plain'))
+    filename = "invoice.pdf"
+    attachment = open("invoice.pdf", "rb")
+    p = MIMEBase('application', 'octet-stream')
+    p.set_payload((attachment).read())
+    encoders.encode_base64(p)
+    p.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msg.attach(p)
+    try:
+        s = smtplib.SMTP('smtp.gmail.com', 587)
+        s.ehlo()
+        s.starttls()
+        s.ehlo()
+        s.login(fromaddr, "xfvklwrbdubwtomo")
+        text = msg.as_string()
+        s.sendmail(fromaddr, toaddr, text)
+        s.quit()
+    except smtplib.SMTPException:
+        print("Error in sending email")
+    print("Email sent")
 
-email_text = """\
-From: %s
-To: %s
-Subject: %s
+if __name__ == "__main__":
+    sendMail("receive")
 
-%s
-"""%(sent_from, ",".join(to),subject,body)
 
-try:
-    smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-    smtp_server.ehlo()
-    smtp_server.login(gmail_user, part)
-    smtp_server.sendmail(sent_from, to, email_text)
-    smtp_server.close()
-    print("Email sent successfully")
-except Exception as ex:
-    print("Something went wrong", ex)
+
+
+# xfvklwrbdubwtomo
