@@ -38,7 +38,6 @@ def insertOrUpdate(Id, Name, Email):
 		if (conn.is_connected()):
 			conn.close()
 			print("Mysql connection is closed")
-			
 
 id = input('Enter id: ')
 name = input('Enter name: ')
