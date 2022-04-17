@@ -1,3 +1,6 @@
+#!/usr/bin/python
+
+from cv2 import CAP_V4L2
 import numpy as np
 import cv2, os
 from PIL import Image
@@ -30,10 +33,10 @@ def getProfile(Id):
 	except mysql.connector.Error as error:
 		print("Failed to display row {}".format(error))
 
-cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cam = cv2.VideoCapture(2, CAP_V4L2)
 # cam = cv2.VideoCapture(1, cv2.CAP_DSHOW)
 if not cam.isOpened():
-	cam.open(0)
+	cam.open(2)
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 fontscale = 1

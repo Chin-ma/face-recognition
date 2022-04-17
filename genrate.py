@@ -1,9 +1,13 @@
 import cv2
+from cv2 import CAP_V4L
+from cv2 import CAP_V4L2
 import mysql.connector
+from tkinter import *
+import tkinter as tk
 from mysql.connector import Error
 from mysql.connector import errorcode
 
-cam = cv2.VideoCapture(0)
+cam = cv2.VideoCapture(2, CAP_V4L2)
 faceDetect = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 def insertOrUpdate(Id, Name, Email):
 	# conn = sqlite3.connect("FaceBase.db")
@@ -39,10 +43,25 @@ def insertOrUpdate(Id, Name, Email):
 			conn.close()
 			print("Mysql connection is closed")
 
-id = input('Enter id: ')
-name = input('Enter name: ')
-email = input('Enter email: ')
+# newWindow = Tk()
+# newWindow.title("Add new face data")
+# newWindow.geometry("400x400")
+# i = tk.Label(newWindow, text="Id").grid(row=0, column=0)
+# n = tk.Label(newWindow, text="Name").grid(row=1, column=0)
+# e = tk.Label(newWindow, text="Email").grid(row=2, column=0)
+# faceId = tk.Entry(newWindow).grid(row=0, column=1)
+# faceName = tk.Entry(newWindow).grid(row=1, column=1)
+# faceEmail = tk.Entry(newWindow).grid(row=2, column=1)
+# insertOrUpdate(faceId, faceName, faceEmail)
+# btn = tk.Button(newWindow, text="Add face", command=insertOrUpdate(faceId, faceName, faceEmail)).grid(row=3, column=0)
+# btn = tk.Button(newWindow, text="Add face", command=).grid(row=3, column=0)
+id = input("Enter id: ")
+name = input("Enter name: ")
+email = input("Enter email: ")
 insertOrUpdate(id, name, email)
+# mainloop()
+
+
 sampleNum = 0
 while(True):
 	ret, frame = cam.read()
@@ -52,7 +71,7 @@ while(True):
 		sampleNum = sampleNum + 1
 		cv2.imwrite("dataSet/user."+id+'.'+ str(sampleNum) +".jpg",frame[y:y+h,x:x+w])
 		cv2.rectangle(frame, (x,y), (x+w,y+h), (0,0,255),2)
-
+		
 	cv2.imshow('frame', frame)
 	if cv2.waitKey(20) & 0xFF == ord('q'):
 		break
